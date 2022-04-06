@@ -1,0 +1,96 @@
+@startuml Compressors
+hide empty description
+
+header
+Compressors Management System
+endheader
+
+[*] --> 1 : Pr1 + Pr2
+[*] -right-> 3 : !Pr1 x !Pr2
+state "Étape 1" as 1 {
+    state "Pompe 1" as X1_Pompe1
+    state "T1 (2s)" as X1_T1
+}
+
+1 --> 2 : T1
+
+state "Étape 2" as 2 {
+    state "Pompe 1" as X2_Pompe1
+    state "Pompe 2" as X2_Pompe2
+}
+
+2 --> 3 : !Pr1 x !Pr2
+
+state "Étape 3" as 3 {
+    state "Purge 1" as X3_Purge1
+    state "T2 (500ms)" as X3_T2
+}
+
+3 --> 4 : T2
+
+state "Étape 4" as 4 {
+    state "Purge 1" as X4_Purge1
+    state "Purge 2" as X4_Purge2
+    state "T3 (60s)" as X4_T3
+}
+
+4 --> 5 : T3
+state "Étape 5" as 5
+
+5 --> 6 : Pr1 + Pr2
+
+state "Étape 6" as 6 {
+    state "i++" as X6_I
+}
+
+state 7_xj <<join>>
+
+6 --> 7_0 : i < 5
+state "Étape 7" as 7_0 {
+    state "Pompe 1" as X7_0_Pompe1
+    state "T4 (2s)" as X7_0_T4
+}
+7_0 --> 7_xj
+
+6 --> 7_1 : i >= 5
+state "Étape 7'" as 7_1 {
+    state "Pompe 2" as X7_1_Pompe2
+    state "T4 (2s)" as X7_1_T4
+}
+7_1 --> 7_xj
+
+7_xj --> 7_2 : T4 x (Pr1 x Pr2)
+state "Étape 7''" as 7_2 {
+    state "Pompe 1" as X7_2_Pompe1
+    state "Pompe 2" as X7_2_Pompe2
+}
+
+state 7_xc <<choice>>
+7_xj --> 7_xc : !Pr1 x !Pr2
+7_2 --> 7_xc : !Pr1 x !Pr2
+
+7_xc --> 5 : i < 10
+7_xc --> 8 : i >= 10
+
+state "Étape 8" as 8 {
+    state "Purge 1" as X8_Purge1
+    state "T5 (500ms)" as X8_T5
+}
+
+8 --> 9 : T5
+
+state "Étape 9" as 9 {
+    state "Purge 1" as X9_Purge1
+    state "Purge 2" as X9_Purge2
+    state "T6 (15s)" as X9_T6
+    state "i = 0" as X9_I
+}
+
+9 --> 5 : T6
+
+
+footer
+Copyright (c) 2022 Florian Poot
+endfooter
+
+@enduml
