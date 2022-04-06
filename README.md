@@ -17,4 +17,4 @@ CONTROLLINO MINI.
 
 ## Image
 
-<img src=".images/image1.jpg" width="600" /><p>
+<img src=".images/image1.png" width="600" /><p>
